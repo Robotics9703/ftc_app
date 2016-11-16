@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @Disabled
-@Autonomous(name="Inteli_Auto", group="Linear Opmode")
-public class Inteli_Auto extends LinearOpMode {
+@Autonomous(name="Inteli_Auto_Red", group="Linear Opmode")
+public class Inteli_Auto_Red extends LinearOpMode {
 
     DcMotor motorLeft = null;
     DcMotor motorRight = null;
