@@ -75,24 +75,42 @@ public class Sensors_Auto extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
             do {
-                Forward(Full_Power);
-            } while(odsSensor.getLightDetected() < 0.5);
-            if (odsSensor.getLightDetected() > 0.5) {
-                Forward(Full_Power);
-            }
-            if (odsSensor.getLightDetected() < 0.5){
+            Forward(Full_Power);
+        } while(odsSensor.getLightDetected() > 0.5);
+
+            if (odsSensor.getLightDetected() > 0.5){
                 StopDriving();
                 LeftT(500);
                 if (touchSensor.isPressed()){
-                    if(colorSensor.red()>= 1){
-
+                    if(colorSensor.red()>= colorSensor.blue()){
+                    leftArm.setPosition(0.1);
                     }
-                    if(colorSensor.blue()>=1){
-
+                    if(colorSensor.blue()>= colorSensor.red()){
+                        leftArm.setPosition(0.8);
                     }
                 }
             }
+
+            if(odsSensor.getLightDetected() < 0.5) {
+                do {
+                    Forward(Full_Power / 2);
+                } while (touchSensor.isPressed());
+                if (touchSensor.isPressed()) {
+                    if (colorSensor.red() >= colorSensor.blue()) {
+                        leftArm.setPosition(0.1);
+                    }
+                    if (colorSensor.blue() >= colorSensor.red()) {
+                        leftArm.setPosition(0.8);
+                    }
+                }
+            }
+
+
+
+
+
 
             // check the status of the x button on either gamepad.
             bCurrState = gamepad1.x;
@@ -165,6 +183,7 @@ public class Sensors_Auto extends LinearOpMode {
             //PivotUp (time);
             //PivotDown (time);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public void ForwardT ( double power, int time)throws InterruptedException {
             motorLeft.setPower(power);
