@@ -18,7 +18,8 @@ public class Inteli_Auto_Red extends LinearOpMode {
 
     private DcMotor motorLeft = null;
     private DcMotor motorRight = null;
-    private DcMotor ballM = null;
+    private DcMotor ballM1 = null;
+    private DcMotor ballM2 = null;
     private DcMotor pivot = null;
     private DcMotor flapLeft = null;
     private DcMotor flapRight = null;
@@ -36,7 +37,8 @@ public class Inteli_Auto_Red extends LinearOpMode {
         //Initialize
         motorLeft = hardwareMap.dcMotor.get("DriveLeft");
         motorRight = hardwareMap.dcMotor.get("DriveRight");
-        ballM = hardwareMap.dcMotor.get("Ball");
+        ballM1 = hardwareMap.dcMotor.get("ballM1");
+        ballM2 = hardwareMap.dcMotor.get("ballM2");
         pivot = hardwareMap.dcMotor.get("Pivot");
         flapLeft = hardwareMap.dcMotor.get("flapLeft");
         flapRight = hardwareMap.dcMotor.get("flapRight");
@@ -220,12 +222,8 @@ public class Inteli_Auto_Red extends LinearOpMode {
     }
 
     public void BallsOut ( long time)throws InterruptedException {
-        ballM.setPower(-1);
-        Thread.sleep(time);
-    }
-
-    public void BallsIn ( long time)throws InterruptedException {
-        ballM.setPower(1);
+        ballM1.setPower(1);
+        ballM2.setPower(1);
         Thread.sleep(time);
     }
 

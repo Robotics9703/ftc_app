@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -11,31 +13,37 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 public class Inteli_TeleOp extends LinearOpMode {
     /* Declare here any fields you might find useful. */
     //Declare motors
-    DcMotor motorLeft = null;
-    DcMotor motorRight = null;
-    DcMotor tape = null;
-    DcMotor pivot = null;
-    DcMotor flapLeft = null;
-    DcMotor flapRight = null;
-    Servo climber = null;
-    TouchSensor touchSensor = null;
+    private DcMotor motorLeft = null;
+    private DcMotor motorRight = null;
+    private DcMotor ballM1 = null;
+    private DcMotor ballM2 = null;
+    private DcMotor pivot = null;
+    private DcMotor flapLeft = null;
+    private DcMotor flapRight = null;
+    private Servo leftArm = null;
+    private Servo rightArm = null;
+
+    private TouchSensor touchSensor;
+    private OpticalDistanceSensor odsSensor;
+    private ColorSensor colorSensor;
+
 
     public void runOpMode() throws InterruptedException
 
-    {       
-        //Initialize motors
+    {
+        //Initialize
         motorLeft = hardwareMap.dcMotor.get("DriveLeft");
         motorRight = hardwareMap.dcMotor.get("DriveRight");
-        tape = hardwareMap.dcMotor.get("Tape");
+        ballM1 = hardwareMap.dcMotor.get("ballM1");
+        ballM2 = hardwareMap.dcMotor.get("ballM2");
         pivot = hardwareMap.dcMotor.get("Pivot");
         flapLeft = hardwareMap.dcMotor.get("flapLeft");
         flapRight = hardwareMap.dcMotor.get("flapRight");
-
-        climber = hardwareMap.servo.get("Climber");
-        touchSensor = hardwareMap.touchSensor.get("touchSensor");
-
-        tape.setDirection(DcMotor.Direction.REVERSE);
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
+        leftArm = hardwareMap.servo.get("left arm");
+        rightArm = hardwareMap.servo.get("right arm");
+        touchSensor = hardwareMap.touchSensor.get("touch sensor");
+        odsSensor = hardwareMap.opticalDistanceSensor.get("ODS");
+        colorSensor = hardwareMap.colorSensor.get("color sensor");
 
         // Wait for the game to start
         waitForStart();
@@ -54,17 +62,18 @@ public class Inteli_TeleOp extends LinearOpMode {
                     // Climbers!!!!
                 if (gamepad1.a)
                 {
-                    climber.setPosition(0.8);
+                    leftArm.setPosition(0.8);
                 }
                 if (gamepad1.y)
                 {
-                    climber.setPosition(0.7);
+                    leftArm.setPosition(0.7);
                 }
 
 
                 // Game pad 2
                     //Lift!!!!
-                tape.setPower(gamepad2.right_stick_y);
+            ballM1.setPower(gamepad2.right_stick_y);
+            ballM2.setPower(gamepad2.right_stick_y);
 
                     // Flaps!!!!
                 flapLeft.setPower(gamepad2.left_trigger);
