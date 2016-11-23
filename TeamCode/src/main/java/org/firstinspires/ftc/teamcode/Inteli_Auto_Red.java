@@ -13,12 +13,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
-@Autonomous(name="Sensors_Auto", group="Linear Opmode")
-public class Sensors_Auto extends LinearOpMode {
+@Autonomous(name="Inteli_Auto_Red", group="Linear Opmode")
+public class Inteli_Auto_Red extends LinearOpMode {
 
     private DcMotor motorLeft = null;
     private DcMotor motorRight = null;
-    private DcMotor ballM = null;
+    private DcMotor ballM1 = null;
+    private DcMotor ballM2 = null;
     private DcMotor pivot = null;
     private DcMotor flapLeft = null;
     private DcMotor flapRight = null;
@@ -36,7 +37,8 @@ public class Sensors_Auto extends LinearOpMode {
         //Initialize
         motorLeft = hardwareMap.dcMotor.get("DriveLeft");
         motorRight = hardwareMap.dcMotor.get("DriveRight");
-        ballM = hardwareMap.dcMotor.get("Ball");
+        ballM1 = hardwareMap.dcMotor.get("ballM1");
+        ballM2 = hardwareMap.dcMotor.get("ballM2");
         pivot = hardwareMap.dcMotor.get("Pivot");
         flapLeft = hardwareMap.dcMotor.get("flapLeft");
         flapRight = hardwareMap.dcMotor.get("flapRight");
@@ -75,24 +77,42 @@ public class Sensors_Auto extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
             do {
                 Forward(Full_Power);
-            } while(odsSensor.getLightDetected() < 0.5);
-            if (odsSensor.getLightDetected() > 0.5) {
-                Forward(Full_Power);
-            }
-            if (odsSensor.getLightDetected() < 0.5){
+            } while(odsSensor.getLightDetected() > 0.5);
+
+            if (odsSensor.getLightDetected() > 0.5){
                 StopDriving();
                 LeftT(500);
                 if (touchSensor.isPressed()){
-                    if(colorSensor.red()>= 1){
-
+                    if(colorSensor.red()> colorSensor.blue()){
+                        leftArm.setPosition(0.1);
                     }
-                    if(colorSensor.blue()>=1){
-
+                    if(colorSensor.blue()> colorSensor.red()){
+                        leftArm.setPosition(0.8);
                     }
                 }
             }
+
+            if(odsSensor.getLightDetected() < 0.5) {
+                do {
+                    Forward(Full_Power / 2);
+                } while (touchSensor.isPressed());
+                if (touchSensor.isPressed()) {
+                    if (colorSensor.red() > colorSensor.blue()) {
+                        leftArm.setPosition(0.1);
+                    }
+                    if (colorSensor.blue() > colorSensor.red()) {
+                        leftArm.setPosition(0.8);
+                    }
+                }
+            }
+
+
+
+
+
 
             // check the status of the x button on either gamepad.
             bCurrState = gamepad1.x;
@@ -150,77 +170,74 @@ public class Sensors_Auto extends LinearOpMode {
         }
     }
 
-            //Void Library
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //ForwardT (power, time);
-            //BackwardT (power, time);
-            //LeftT (time);
-            //RightT (time);
-            //StopDriving ();
-            //BallOut (time);
-            //BallIn (time);
-            //LeftArm ();
-            //RightArm ();
-            //LockHook (power, distance(1 rev = 1440));
-            //PivotUp (time);
-            //PivotDown (time);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Void Library
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //ForwardT (power, time);
+    //BackwardT (power, time);
+    //LeftT (time);
+    //RightT (time);
+    //StopDriving ();
+    //BallOut (time);
+    //BallIn (time);
+    //LeftArm ();
+    //RightArm ();
+    //LockHook (power, distance(1 rev = 1440));
+    //PivotUp (time);
+    //PivotDown (time);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void ForwardT ( double power, int time)throws InterruptedException {
-            motorLeft.setPower(power);
-            motorRight.setPower(power);
-            Thread.sleep(time);
-        }
 
-        public void Forward ( double power)throws InterruptedException {
+    public void ForwardT ( double power, int time)throws InterruptedException {
+        motorLeft.setPower(power);
+        motorRight.setPower(power);
+        Thread.sleep(time);
+    }
+
+    public void Forward ( double power)throws InterruptedException {
         motorLeft.setPower(power);
         motorRight.setPower(power);
     }
 
-        public void BackwardT ( double power, long time)throws InterruptedException {
-            motorLeft.setPower(power);
-            motorRight.setPower(power);
-            Thread.sleep(time);
-        }
+    public void BackwardT ( double power, long time)throws InterruptedException {
+        motorLeft.setPower(power);
+        motorRight.setPower(power);
+        Thread.sleep(time);
+    }
 
-        public void LeftT ( long time)throws InterruptedException {
-            motorLeft.setPower(0);
-            motorRight.setPower(1);
-            Thread.sleep(time);
-        }
+    public void LeftT ( long time)throws InterruptedException {
+        motorLeft.setPower(0);
+        motorRight.setPower(1);
+        Thread.sleep(time);
+    }
 
-        public void RightT ( long time)throws InterruptedException {
-            motorLeft.setPower(1);
-            motorRight.setPower(0);
-            Thread.sleep(time);
-        }
+    public void RightT ( long time)throws InterruptedException {
+        motorLeft.setPower(1);
+        motorRight.setPower(0);
+        Thread.sleep(time);
+    }
 
-        public void StopDriving () {
-            motorLeft.setPower(0);
-            motorRight.setPower(0);
-        }
+    public void StopDriving () {
+        motorLeft.setPower(0);
+        motorRight.setPower(0);
+    }
 
-        public void BallsOut ( long time)throws InterruptedException {
-            ballM.setPower(-1);
-            Thread.sleep(time);
-        }
+    public void BallsOut ( long time)throws InterruptedException {
+        ballM1.setPower(1);
+        ballM2.setPower(1);
+        Thread.sleep(time);
+    }
 
-        public void BallsIn ( long time)throws InterruptedException {
-            ballM.setPower(1);
-            Thread.sleep(time);
-        }
-
-        public void LeftArm ()throws InterruptedException {
-            double OutS = 0.2;
-            double InS = 0.6;
-            leftArm.setPosition(OutS);
-            Thread.sleep(1000);
-            leftArm.setPosition(InS);
-            Thread.sleep(1000);
-            leftArm.setPosition(OutS);
-            Thread.sleep(1000);
-            leftArm.setPosition(InS);
-        }
+    public void LeftArm ()throws InterruptedException {
+        double OutS = 0.2;
+        double InS = 0.6;
+        leftArm.setPosition(OutS);
+        Thread.sleep(1000);
+        leftArm.setPosition(InS);
+        Thread.sleep(1000);
+        leftArm.setPosition(OutS);
+        Thread.sleep(1000);
+        leftArm.setPosition(InS);
+    }
 
     public void RightArm ()throws InterruptedException {
         double OutS = 0.2;
