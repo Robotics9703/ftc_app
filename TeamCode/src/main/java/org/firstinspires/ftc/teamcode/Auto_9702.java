@@ -122,7 +122,11 @@ public class Auto_9702 extends LinearOpMode {
         motorLeft.setPower(0);
         motorRight.setPower(0);
     }
+    public void BallShot() {
+        BallShooterRight.setPower(100);
+        BallShooterLeft.setPower(100);
 
+    }
 
 }
 
