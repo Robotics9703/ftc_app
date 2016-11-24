@@ -30,7 +30,6 @@ public class Test_TeleOp_9702 extends LinearOpMode {
         // send the info back to driver station using telemetry function.
 
 
-        // Go go gadget robot!
         while (opModeIsActive())
         {
             // The game pad state has changed. Do something with that!
